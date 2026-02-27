@@ -1,4 +1,5 @@
 import './App.css'
+import { ThumbnailMakerPage } from './features/thumbnail-maker/ThumbnailMakerPage'
 
 const phases = [
   { id: 'Phase 0', title: '기준선 확보', detail: '기능 인벤토리 + 핵심 도구 회귀 테스트' },
@@ -42,6 +43,8 @@ function App() {
           dev-tools-next-migration-plan.md 열기
         </a>
       </section>
+
+      <ThumbnailMakerPage />
     </main>
   )
 }
