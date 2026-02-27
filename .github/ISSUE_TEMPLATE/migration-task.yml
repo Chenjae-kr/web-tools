@@ -1,0 +1,49 @@
+name: Migration Task
+description: dev-tools -> web-tools 마이그레이션 단위 작업
+title: "[Migration] "
+labels:
+  - migration
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: 작업 요약
+      description: 무엇을 전환/구현하는지 간단히 적어주세요.
+      placeholder: thumbnail-maker preset 시스템을 React 컴포넌트로 전환
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: 범위
+      description: 포함/제외 범위를 명확히 적어주세요.
+      placeholder: |
+        포함: preset 전환, canvas 렌더, PNG 다운로드
+        제외: JSON import/export
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: 완료 판정 기준
+      placeholder: |
+        - [ ] 기존 기능 parity 달성
+        - [ ] e2e 시나리오 통과
+        - [ ] 문서 업데이트 완료
+    validations:
+      required: true
+
+  - type: textarea
+    id: risks
+    attributes:
+      label: 리스크 / 대응
+      description: 예상 리스크와 대응 방안
+
+  - type: input
+    id: phase
+    attributes:
+      label: Phase
+      placeholder: Phase 0 | Phase 1 | Phase 2 | Phase 3
+    validations:
+      required: true
