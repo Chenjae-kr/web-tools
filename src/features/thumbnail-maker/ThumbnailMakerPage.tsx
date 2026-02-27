@@ -1,24 +1,27 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { CanvasSettingsPanel } from './components/CanvasSettingsPanel'
 import { TextSettingsPanel } from './components/TextSettingsPanel'
 import { ExportSettingsPanel } from './components/ExportSettingsPanel'
-
-type Preset = 'quote' | 'blog' | 'youtube' | 'dev-sense'
-type Ratio = '1:1' | '16:9' | '4:3' | '3:2'
+import { useThumbnailMakerStore } from './store'
 
 export function ThumbnailMakerPage() {
-  const [preset] = useState<Preset>('dev-sense')
-  const [ratio, setRatio] = useState<Ratio>('16:9')
-  const [mainText, setMainText] = useState('개발 능력은\n코딩을 잘하는 능력이 아니다')
-  const [subText, setSubText] = useState('중요한 건 문제를 고르는 감각과 우선순위 판단')
-  const [bgColor, setBgColor] = useState('#0b1220')
-  const [format, setFormat] = useState<'png' | 'jpeg' | 'webp'>('png')
-  const [quality, setQuality] = useState(92)
+  const {
+    preset,
+    ratio,
+    mainText,
+    subText,
+    bgColor,
+    format,
+    quality,
+    setRatio,
+    setMainText,
+    setSubText,
+    setBgColor,
+    setFormat,
+    setQuality,
+  } = useThumbnailMakerStore()
 
-  const summary = useMemo(
-    () => ({ preset, ratio, format, quality }),
-    [preset, ratio, format, quality],
-  )
+  const summary = useMemo(() => ({ preset, ratio, format, quality }), [preset, ratio, format, quality])
 
   return (
     <section className="card">
