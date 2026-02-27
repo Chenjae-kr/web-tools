@@ -5,6 +5,7 @@ import { getRouteFromHash, toHash, type AppRoute } from './routes'
 
 const ThumbnailMakerPage = lazy(() => import('./features/thumbnail-maker/ThumbnailMakerPage').then((m) => ({ default: m.ThumbnailMakerPage })))
 const TableChartMakerPage = lazy(() => import('./features/table-chart-maker/TableChartMakerPage').then((m) => ({ default: m.TableChartMakerPage })))
+const DataConverterPage = lazy(() => import('./features/data-converter/DataConverterPage').then((m) => ({ default: m.DataConverterPage })))
 
 function App() {
   const [route, setRoute] = useState<AppRoute>(() => getRouteFromHash(window.location.hash))
@@ -18,6 +19,7 @@ function App() {
   const title = useMemo(() => {
     if (route === 'thumbnail-maker') return 'Thumbnail Maker'
     if (route === 'table-chart-maker') return 'Table Chart Maker'
+    if (route === 'data-converter') return 'Data Converter'
     return 'Home'
   }, [route])
 
@@ -29,6 +31,7 @@ function App() {
           <a href={toHash('home')}>Home</a>
           <a href={toHash('thumbnail-maker')}>Thumbnail Maker</a>
           <a href={toHash('table-chart-maker')}>Table Chart Maker</a>
+          <a href={toHash('data-converter')}>Data Converter</a>
         </div>
       </nav>
 
@@ -38,6 +41,7 @@ function App() {
       <Suspense fallback={<section className="card">로딩 중...</section>}>
         {route === 'thumbnail-maker' && <ThumbnailMakerPage />}
         {route === 'table-chart-maker' && <TableChartMakerPage />}
+        {route === 'data-converter' && <DataConverterPage />}
       </Suspense>
     </main>
   )
