@@ -2,6 +2,8 @@ import { useMemo } from 'react'
 import { CanvasSettingsPanel } from './components/CanvasSettingsPanel'
 import { TextSettingsPanel } from './components/TextSettingsPanel'
 import { ExportSettingsPanel } from './components/ExportSettingsPanel'
+import { ThumbnailPreview } from './components/ThumbnailPreview'
+import { DownloadButton } from './components/DownloadButton'
 import { useThumbnailMakerStore } from './store'
 
 export function ThumbnailMakerPage() {
@@ -49,14 +51,17 @@ export function ThumbnailMakerPage() {
           quality={quality}
           onChangeQuality={setQuality}
         />
+
+        <ThumbnailPreview />
       </div>
 
-      <div style={{ marginTop: 12 }}>
+      <div style={{ marginTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
         <strong>현재 상태 요약</strong>
-        <pre style={{ margin: '8px 0 0', padding: 12, background: '#0f172a', color: '#e2e8f0', borderRadius: 8, overflowX: 'auto' }}>
-          {JSON.stringify(summary, null, 2)}
-        </pre>
+        <DownloadButton />
       </div>
+      <pre style={{ margin: '8px 0 0', padding: 12, background: '#0f172a', color: '#e2e8f0', borderRadius: 8, overflowX: 'auto' }}>
+        {JSON.stringify(summary, null, 2)}
+      </pre>
     </section>
   )
 }
