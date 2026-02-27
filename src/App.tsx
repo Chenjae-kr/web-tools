@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { Suspense, lazy, useEffect, useMemo, useState } from 'react'
 import './App.css'
-import { ThumbnailMakerPage } from './features/thumbnail-maker/ThumbnailMakerPage'
-import { TableChartMakerPage } from './features/table-chart-maker/TableChartMakerPage'
 import { HomePage } from './pages/HomePage'
 import { getRouteFromHash, toHash, type AppRoute } from './routes'
+
+const ThumbnailMakerPage = lazy(() => import('./features/thumbnail-maker/ThumbnailMakerPage').then((m) => ({ default: m.ThumbnailMakerPage })))
+const TableChartMakerPage = lazy(() => import('./features/table-chart-maker/TableChartMakerPage').then((m) => ({ default: m.TableChartMakerPage })))
 
 function App() {
   const [route, setRoute] = useState<AppRoute>(() => getRouteFromHash(window.location.hash))
@@ -34,8 +35,10 @@ function App() {
       <p className="subtitle" style={{ marginTop: 8 }}>Current Route: {title}</p>
 
       {route === 'home' && <HomePage />}
-      {route === 'thumbnail-maker' && <ThumbnailMakerPage />}
-      {route === 'table-chart-maker' && <TableChartMakerPage />}
+      <Suspense fallback={<section className="card">로딩 중...</section>}>
+        {route === 'thumbnail-maker' && <ThumbnailMakerPage />}
+        {route === 'table-chart-maker' && <TableChartMakerPage />}
+      </Suspense>
     </main>
   )
 }
