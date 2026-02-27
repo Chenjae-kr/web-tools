@@ -1,11 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import * as echarts from 'echarts'
+import { init, use, type ECharts, type EChartsCoreOption } from 'echarts/core'
+import { BarChart, LineChart, PieChart } from 'echarts/charts'
+import { GraphicComponent, GridComponent, LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components'
+import { CanvasRenderer } from 'echarts/renderers'
 import { parseJsonText, parseTableText } from '../parser'
 import { useTableChartStore } from '../store'
 
+use([BarChart, LineChart, PieChart, TitleComponent, TooltipComponent, LegendComponent, GridComponent, GraphicComponent, CanvasRenderer])
+
 export function ChartPreview() {
   const ref = useRef<HTMLDivElement | null>(null)
-  const chartRef = useRef<echarts.ECharts | null>(null)
+  const chartRef = useRef<ECharts | null>(null)
   const [parseError, setParseError] = useState<string | null>(null)
   const {
     sourceType,
@@ -39,7 +44,7 @@ export function ChartPreview() {
 
   useEffect(() => {
     if (!ref.current) return
-    chartRef.current = echarts.init(ref.current)
+    chartRef.current = init(ref.current)
     return () => chartRef.current?.dispose()
   }, [])
 
@@ -52,7 +57,7 @@ export function ChartPreview() {
       itemStyle: { color: seriesColor },
     }
 
-    const option: echarts.EChartsOption = {
+    const option: EChartsCoreOption = {
       animation: false,
       backgroundColor: bgColor,
       title: {
