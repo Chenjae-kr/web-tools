@@ -4,7 +4,7 @@ import { useThumbnailMakerStore } from '../store'
 
 export function ThumbnailPreview() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const { ratio, bgColor, bgImageDataUrl, overlayMode, overlayStrength, decorStyle, textStroke, textPadding, mainY, subY, mainText, subText } = useThumbnailMakerStore()
+  const { ratio, bgColor, bgImageDataUrl, overlayMode, overlayStrength, decorStyle, textStroke, textPadding, mainY, subY, mainScale, subScale, mainText, subText } = useThumbnailMakerStore()
 
   const bgImage = useMemo(() => {
     if (!bgImageDataUrl) return null
@@ -29,6 +29,8 @@ export function ThumbnailPreview() {
         textPadding,
         mainY,
         subY,
+        mainScale,
+        subScale,
         mainText,
         subText,
       })
@@ -38,7 +40,7 @@ export function ThumbnailPreview() {
       return
     }
     paint()
-  }, [ratio, bgColor, bgImage, overlayMode, overlayStrength, decorStyle, textStroke, textPadding, mainY, subY, mainText, subText])
+  }, [ratio, bgColor, bgImage, overlayMode, overlayStrength, decorStyle, textStroke, textPadding, mainY, subY, mainScale, subScale, mainText, subText])
 
   return (
     <section className="phaseItem">

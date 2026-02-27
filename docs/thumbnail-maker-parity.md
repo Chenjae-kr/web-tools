@@ -14,16 +14,17 @@
 - [x] JSON 파일 업로드 Import UX
 - [x] 이미지 업로드(background image)
 - [x] overlay 모드/강도 옵션 (none/dim/gradient/vignette)
-- [x] decor style 옵션 기본 이관 (minimal/frame/corner)
+- [x] decor style 옵션 기본 이관 (minimal/frame/double-frame/corner)
 - [x] 텍스트 stroke/padding/position fine control (기본)
-- [x] e2e 기본 검증 (home/route/preset)
+- [x] 텍스트 main/sub scale 개별 비율 옵션
+- [x] JSON 스키마 검증(zod) 및 기본 에러 메시지
+- [x] e2e 시나리오 5개 이상 통과 (home/route/preset/overlay/decor)
 
 ## 남은 parity 항목
 
-- [ ] 레거시 decor 스타일 1:1 매칭 고도화
-- [ ] 텍스트 main/sub scale 개별 비율 옵션
-- [ ] JSON 스키마 검증(zod) 및 에러 메시지 개선
-- [ ] e2e 시나리오 5개 이상 확장 (업로드/오버레이/다운로드 포함)
+- [ ] 레거시 decor 스타일 완전 1:1 시각 매칭
+- [ ] 결과물 시각 차이 허용범위 수치화(픽셀/레이아웃 기준)
+- [ ] 업로드 이미지 케이스(대용량/비정상 파일) 방어 로직 강화
 
 ## 완료 기준
 

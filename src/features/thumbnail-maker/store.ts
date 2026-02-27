@@ -5,7 +5,7 @@ export type Preset = 'quote' | 'blog' | 'youtube' | 'dev-sense'
 export type Ratio = '1:1' | '16:9' | '4:3' | '3:2'
 export type BgMode = 'color' | 'image'
 export type OverlayMode = 'none' | 'dim' | 'gradient' | 'vignette'
-export type DecorStyle = 'minimal' | 'frame' | 'corner'
+export type DecorStyle = 'minimal' | 'frame' | 'double-frame' | 'corner'
 
 type ThumbnailMakerState = {
   preset: Preset
@@ -22,6 +22,8 @@ type ThumbnailMakerState = {
   textPadding: number
   mainY: number
   subY: number
+  mainScale: number
+  subScale: number
   format: 'png' | 'jpeg' | 'webp'
   quality: number
 
@@ -39,6 +41,8 @@ type ThumbnailMakerState = {
   setTextPadding: (value: number) => void
   setMainY: (value: number) => void
   setSubY: (value: number) => void
+  setMainScale: (value: number) => void
+  setSubScale: (value: number) => void
   setFormat: (format: 'png' | 'jpeg' | 'webp') => void
   setQuality: (quality: number) => void
 }
@@ -60,6 +64,8 @@ export const useThumbnailMakerStore = create<ThumbnailMakerState>((set) => ({
   textPadding: 56,
   mainY: 28,
   subY: 56,
+  mainScale: 100,
+  subScale: 100,
   format: 'png',
   quality: 92,
 
@@ -88,6 +94,8 @@ export const useThumbnailMakerStore = create<ThumbnailMakerState>((set) => ({
   setTextPadding: (textPadding) => set({ textPadding: Math.max(20, Math.min(220, textPadding)) }),
   setMainY: (mainY) => set({ mainY: Math.max(10, Math.min(70, mainY)) }),
   setSubY: (subY) => set({ subY: Math.max(25, Math.min(90, subY)) }),
+  setMainScale: (mainScale) => set({ mainScale: Math.max(60, Math.min(160, mainScale)) }),
+  setSubScale: (subScale) => set({ subScale: Math.max(60, Math.min(160, subScale)) }),
   setFormat: (format) => set({ format }),
   setQuality: (quality) => set({ quality: Math.max(1, Math.min(100, quality)) }),
 }))

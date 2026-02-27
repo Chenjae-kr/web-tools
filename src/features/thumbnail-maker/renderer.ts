@@ -11,6 +11,8 @@ type RenderInput = {
   textPadding: number
   mainY: number
   subY: number
+  mainScale: number
+  subScale: number
   mainText: string
   subText: string
 }
@@ -55,7 +57,7 @@ export function renderThumbnail(canvas: HTMLCanvasElement, input: RenderInput) {
   const titleLines = input.mainText.split('\n').filter(Boolean)
   ctx.textAlign = 'left'
   ctx.fillStyle = '#F8FAFC'
-  ctx.font = `800 ${Math.round(w * 0.05)}px Pretendard, Apple SD Gothic Neo, sans-serif`
+  ctx.font = `800 ${Math.round(w * 0.05 * (input.mainScale / 100))}px Pretendard, Apple SD Gothic Neo, sans-serif`
   let y = cardY + Math.round((cardH * input.mainY) / 100)
 
   for (const line of titleLines.slice(0, 3)) {
@@ -65,7 +67,7 @@ export function renderThumbnail(canvas: HTMLCanvasElement, input: RenderInput) {
   }
 
   ctx.fillStyle = '#94A3B8'
-  ctx.font = `500 ${Math.round(w * 0.02)}px Pretendard, Apple SD Gothic Neo, sans-serif`
+  ctx.font = `500 ${Math.round(w * 0.02 * (input.subScale / 100))}px Pretendard, Apple SD Gothic Neo, sans-serif`
   const subY = cardY + Math.round((cardH * input.subY) / 100)
   strokeText(ctx, input.subText, x, subY, Math.max(1, Math.round(input.textStroke * 0.65)))
   fitAndFillText(ctx, input.subText, x, subY, maxW)
@@ -168,6 +170,14 @@ function drawDecor(ctx: CanvasRenderingContext2D, x: number, y: number, w: numbe
 
   if (style === 'frame') {
     roundRect(ctx, x + 12, y + 12, w - 24, h - 24, 18)
+    ctx.stroke()
+    return
+  }
+
+  if (style === 'double-frame') {
+    roundRect(ctx, x + 12, y + 12, w - 24, h - 24, 18)
+    ctx.stroke()
+    roundRect(ctx, x + 26, y + 26, w - 52, h - 52, 14)
     ctx.stroke()
     return
   }

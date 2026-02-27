@@ -13,6 +13,10 @@ type Props = {
   subY: number
   onChangeMainY: (value: number) => void
   onChangeSubY: (value: number) => void
+  mainScale: number
+  subScale: number
+  onChangeMainScale: (value: number) => void
+  onChangeSubScale: (value: number) => void
 }
 
 export function TextSettingsPanel({
@@ -28,6 +32,10 @@ export function TextSettingsPanel({
   subY,
   onChangeMainY,
   onChangeSubY,
+  mainScale,
+  subScale,
+  onChangeMainScale,
+  onChangeSubScale,
 }: Props) {
   return (
     <section className="phaseItem">
@@ -50,22 +58,12 @@ export function TextSettingsPanel({
       </div>
 
       <div style={{ marginTop: 10, display: 'grid', gap: 8 }}>
-        <label style={rowStyle}>
-          <span>Stroke</span>
-          <input type="number" min={0} max={20} value={textStroke} onChange={(e) => onChangeTextStroke(Number(e.target.value) || 0)} style={numStyle} />
-        </label>
-        <label style={rowStyle}>
-          <span>Padding</span>
-          <input type="number" min={20} max={220} value={textPadding} onChange={(e) => onChangeTextPadding(Number(e.target.value) || 56)} style={numStyle} />
-        </label>
-        <label style={rowStyle}>
-          <span>Main Y%</span>
-          <input type="number" min={10} max={70} value={mainY} onChange={(e) => onChangeMainY(Number(e.target.value) || 28)} style={numStyle} />
-        </label>
-        <label style={rowStyle}>
-          <span>Sub Y%</span>
-          <input type="number" min={25} max={90} value={subY} onChange={(e) => onChangeSubY(Number(e.target.value) || 56)} style={numStyle} />
-        </label>
+        <label style={rowStyle}><span>Stroke</span><input type="number" min={0} max={20} value={textStroke} onChange={(e) => onChangeTextStroke(Number(e.target.value) || 0)} style={numStyle} /></label>
+        <label style={rowStyle}><span>Padding</span><input type="number" min={20} max={220} value={textPadding} onChange={(e) => onChangeTextPadding(Number(e.target.value) || 56)} style={numStyle} /></label>
+        <label style={rowStyle}><span>Main Y%</span><input type="number" min={10} max={70} value={mainY} onChange={(e) => onChangeMainY(Number(e.target.value) || 28)} style={numStyle} /></label>
+        <label style={rowStyle}><span>Sub Y%</span><input type="number" min={25} max={90} value={subY} onChange={(e) => onChangeSubY(Number(e.target.value) || 56)} style={numStyle} /></label>
+        <label style={rowStyle}><span>Main Scale%</span><input type="number" min={60} max={160} value={mainScale} onChange={(e) => onChangeMainScale(Number(e.target.value) || 100)} style={numStyle} /></label>
+        <label style={rowStyle}><span>Sub Scale%</span><input type="number" min={60} max={160} value={subScale} onChange={(e) => onChangeSubScale(Number(e.target.value) || 100)} style={numStyle} /></label>
       </div>
     </section>
   )

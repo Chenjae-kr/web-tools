@@ -15,6 +15,8 @@ export function DownloadButton() {
     textPadding,
     mainY,
     subY,
+    mainScale,
+    subScale,
     mainText,
     subText,
     format,
@@ -37,6 +39,8 @@ export function DownloadButton() {
         textPadding,
         mainY,
         subY,
+        mainScale,
+        subScale,
         mainText,
         subText,
       })

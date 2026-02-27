@@ -1,6 +1,28 @@
 import { useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
+import { z } from 'zod'
 import { useThumbnailMakerStore } from '../store'
+
+const schema = z.object({
+  preset: z.enum(['quote', 'blog', 'youtube', 'dev-sense']).optional(),
+  ratio: z.enum(['1:1', '16:9', '4:3', '3:2']).optional(),
+  mainText: z.string().optional(),
+  subText: z.string().optional(),
+  bgMode: z.enum(['color', 'image']).optional(),
+  bgColor: z.string().optional(),
+  bgImageDataUrl: z.string().nullable().optional(),
+  overlayMode: z.enum(['none', 'dim', 'gradient', 'vignette']).optional(),
+  overlayStrength: z.number().optional(),
+  decorStyle: z.enum(['minimal', 'frame', 'double-frame', 'corner']).optional(),
+  textStroke: z.number().optional(),
+  textPadding: z.number().optional(),
+  mainY: z.number().optional(),
+  subY: z.number().optional(),
+  mainScale: z.number().optional(),
+  subScale: z.number().optional(),
+  format: z.enum(['png', 'jpeg', 'webp']).optional(),
+  quality: z.number().optional(),
+})
 
 export function JsonIOPanel() {
   const state = useThumbnailMakerStore()
@@ -23,37 +45,48 @@ export function JsonIOPanel() {
       textPadding: state.textPadding,
       mainY: state.mainY,
       subY: state.subY,
+      mainScale: state.mainScale,
+      subScale: state.subScale,
       format: state.format,
       quality: state.quality,
     }
     setRaw(JSON.stringify(payload, null, 2))
   }
 
-  const applyObject = (obj: any) => {
-    if (obj.ratio) state.setRatio(obj.ratio)
-    if (obj.mainText) state.setMainText(String(obj.mainText))
-    if (obj.subText) state.setSubText(String(obj.subText))
-    if (obj.bgMode) state.setBgMode(obj.bgMode)
-    if (obj.bgColor) state.setBgColor(String(obj.bgColor))
-    if (obj.bgImageDataUrl !== undefined) state.setBgImageDataUrl(obj.bgImageDataUrl)
-    if (obj.overlayMode) state.setOverlayMode(obj.overlayMode)
-    if (obj.overlayStrength != null) state.setOverlayStrength(Number(obj.overlayStrength))
-    if (obj.decorStyle) state.setDecorStyle(obj.decorStyle)
-    if (obj.textStroke != null) state.setTextStroke(Number(obj.textStroke))
-    if (obj.textPadding != null) state.setTextPadding(Number(obj.textPadding))
-    if (obj.mainY != null) state.setMainY(Number(obj.mainY))
-    if (obj.subY != null) state.setSubY(Number(obj.subY))
-    if (obj.format) state.setFormat(obj.format)
-    if (obj.quality != null) state.setQuality(Number(obj.quality))
-    if (obj.preset) state.setPreset(obj.preset)
+  const applyObject = (obj: unknown) => {
+    const parsed = schema.safeParse(obj)
+    if (!parsed.success) {
+      const first = parsed.error.issues[0]
+      throw new Error(first?.message || 'invalid json schema')
+    }
+    const data = parsed.data
+    if (data.ratio) state.setRatio(data.ratio)
+    if (data.mainText) state.setMainText(String(data.mainText))
+    if (data.subText) state.setSubText(String(data.subText))
+    if (data.bgMode) state.setBgMode(data.bgMode)
+    if (data.bgColor) state.setBgColor(String(data.bgColor))
+    if (data.bgImageDataUrl !== undefined) state.setBgImageDataUrl(data.bgImageDataUrl)
+    if (data.overlayMode) state.setOverlayMode(data.overlayMode)
+    if (data.overlayStrength != null) state.setOverlayStrength(Number(data.overlayStrength))
+    if (data.decorStyle) state.setDecorStyle(data.decorStyle)
+    if (data.textStroke != null) state.setTextStroke(Number(data.textStroke))
+    if (data.textPadding != null) state.setTextPadding(Number(data.textPadding))
+    if (data.mainY != null) state.setMainY(Number(data.mainY))
+    if (data.subY != null) state.setSubY(Number(data.subY))
+    if (data.mainScale != null) state.setMainScale(Number(data.mainScale))
+    if (data.subScale != null) state.setSubScale(Number(data.subScale))
+    if (data.format) state.setFormat(data.format)
+    if (data.quality != null) state.setQuality(Number(data.quality))
+    if (data.preset) state.setPreset(data.preset)
   }
 
   const onImport = () => {
     try {
       applyObject(JSON.parse(raw))
       alert('JSON 적용 완료')
-    } catch {
-      alert('JSON 파싱 실패')
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'JSON 파싱 실패'
+      alert(`JSON 파싱 실패: ${msg}`)
     }
   }
 
@@ -66,8 +99,9 @@ export function JsonIOPanel() {
         setRaw(text)
         applyObject(JSON.parse(text))
         alert('JSON 파일 적용 완료')
-      } catch {
-        alert('JSON 파일 파싱 실패')
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : 'JSON 파일 파싱 실패'
+        alert(`JSON 파일 파싱 실패: ${msg}`)
       }
     }
     reader.readAsText(file)

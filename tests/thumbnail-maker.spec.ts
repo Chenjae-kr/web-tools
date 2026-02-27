@@ -12,3 +12,10 @@ test('thumbnail maker overlay switch updates summary', async ({ page }) => {
   await page.getByRole('button', { name: 'vignette' }).click()
   await expect(page.locator('pre').last()).toContainText('"overlayMode": "vignette"')
 })
+
+test('thumbnail maker JSON export fills textarea', async ({ page }) => {
+  await page.goto('./#/thumbnail-maker')
+  await page.getByRole('button', { name: 'Export' }).click()
+  const textarea = page.locator('textarea[placeholder="thumbnail config json"]')
+  await expect(textarea).toContainText('"preset"')
+})

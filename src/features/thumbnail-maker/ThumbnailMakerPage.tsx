@@ -24,6 +24,8 @@ export function ThumbnailMakerPage() {
     subY,
     format,
     quality,
+    mainScale,
+    subScale,
     setPreset,
     setRatio,
     setMainText,
@@ -38,13 +40,15 @@ export function ThumbnailMakerPage() {
     setTextPadding,
     setMainY,
     setSubY,
+    setMainScale,
+    setSubScale,
     setFormat,
     setQuality,
   } = useThumbnailMakerStore()
 
   const summary = useMemo(
-    () => ({ preset, ratio, bgMode, overlayMode, overlayStrength, decorStyle, textStroke, textPadding, mainY, subY, format, quality }),
-    [preset, ratio, bgMode, overlayMode, overlayStrength, decorStyle, textStroke, textPadding, mainY, subY, format, quality],
+    () => ({ preset, ratio, bgMode, overlayMode, overlayStrength, decorStyle, textStroke, textPadding, mainY, subY, mainScale, subScale, format, quality }),
+    [preset, ratio, bgMode, overlayMode, overlayStrength, decorStyle, textStroke, textPadding, mainY, subY, mainScale, subScale, format, quality],
   )
 
   const onUploadBgImage = (file: File | null) => {
@@ -115,6 +119,10 @@ export function ThumbnailMakerPage() {
           subY={subY}
           onChangeMainY={setMainY}
           onChangeSubY={setSubY}
+          mainScale={mainScale}
+          subScale={subScale}
+          onChangeMainScale={setMainScale}
+          onChangeSubScale={setSubScale}
         />
 
         <ExportSettingsPanel
