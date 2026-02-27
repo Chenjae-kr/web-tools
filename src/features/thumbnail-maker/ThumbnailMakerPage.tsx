@@ -17,6 +17,11 @@ export function ThumbnailMakerPage() {
     bgColor,
     overlayMode,
     overlayStrength,
+    decorStyle,
+    textStroke,
+    textPadding,
+    mainY,
+    subY,
     format,
     quality,
     setPreset,
@@ -28,13 +33,18 @@ export function ThumbnailMakerPage() {
     setBgImageDataUrl,
     setOverlayMode,
     setOverlayStrength,
+    setDecorStyle,
+    setTextStroke,
+    setTextPadding,
+    setMainY,
+    setSubY,
     setFormat,
     setQuality,
   } = useThumbnailMakerStore()
 
   const summary = useMemo(
-    () => ({ preset, ratio, bgMode, overlayMode, overlayStrength, format, quality }),
-    [preset, ratio, bgMode, overlayMode, overlayStrength, format, quality],
+    () => ({ preset, ratio, bgMode, overlayMode, overlayStrength, decorStyle, textStroke, textPadding, mainY, subY, format, quality }),
+    [preset, ratio, bgMode, overlayMode, overlayStrength, decorStyle, textStroke, textPadding, mainY, subY, format, quality],
   )
 
   const onUploadBgImage = (file: File | null) => {
@@ -51,7 +61,7 @@ export function ThumbnailMakerPage() {
   return (
     <section className="card">
       <h2>Thumbnail Maker (Parity 확장 중)</h2>
-      <p className="subtitle">배경 이미지/오버레이까지 이관 진행</p>
+      <p className="subtitle">배경/오버레이/데코/텍스트 세부옵션 이관</p>
 
       <div className="phaseList">
         <section className="phaseItem">
@@ -88,6 +98,8 @@ export function ThumbnailMakerPage() {
           onChangeOverlayMode={setOverlayMode}
           overlayStrength={overlayStrength}
           onChangeOverlayStrength={setOverlayStrength}
+          decorStyle={decorStyle}
+          onChangeDecorStyle={setDecorStyle}
         />
 
         <TextSettingsPanel
@@ -95,6 +107,14 @@ export function ThumbnailMakerPage() {
           subText={subText}
           onChangeMainText={setMainText}
           onChangeSubText={setSubText}
+          textStroke={textStroke}
+          onChangeTextStroke={setTextStroke}
+          textPadding={textPadding}
+          onChangeTextPadding={setTextPadding}
+          mainY={mainY}
+          subY={subY}
+          onChangeMainY={setMainY}
+          onChangeSubY={setSubY}
         />
 
         <ExportSettingsPanel

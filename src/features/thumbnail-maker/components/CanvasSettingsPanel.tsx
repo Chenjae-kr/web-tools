@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react'
-import type { BgMode, OverlayMode, Ratio } from '../store'
+import type { BgMode, DecorStyle, OverlayMode, Ratio } from '../store'
 
 type Props = {
   ratio: Ratio
@@ -13,10 +13,13 @@ type Props = {
   onChangeOverlayMode: (mode: OverlayMode) => void
   overlayStrength: number
   onChangeOverlayStrength: (value: number) => void
+  decorStyle: DecorStyle
+  onChangeDecorStyle: (style: DecorStyle) => void
 }
 
 const ratios: Ratio[] = ['1:1', '16:9', '4:3', '3:2']
 const overlayModes: OverlayMode[] = ['none', 'dim', 'gradient', 'vignette']
+const decorStyles: DecorStyle[] = ['minimal', 'frame', 'corner']
 
 export function CanvasSettingsPanel({
   ratio,
@@ -30,6 +33,8 @@ export function CanvasSettingsPanel({
   onChangeOverlayMode,
   overlayStrength,
   onChangeOverlayStrength,
+  decorStyle,
+  onChangeDecorStyle,
 }: Props) {
   return (
     <section className="phaseItem">
@@ -40,13 +45,7 @@ export function CanvasSettingsPanel({
             key={r}
             type="button"
             onClick={() => onChangeRatio(r)}
-            style={{
-              border: '1px solid #cbd5e1',
-              borderRadius: 8,
-              padding: '6px 10px',
-              background: ratio === r ? '#dbeafe' : '#fff',
-              cursor: 'pointer',
-            }}
+            style={modeBtn(ratio === r)}
           >
             {r}
           </button>
@@ -93,6 +92,17 @@ export function CanvasSettingsPanel({
             style={{ width: 72, border: '1px solid #cbd5e1', borderRadius: 6, padding: '4px 6px' }}
           />
         </label>
+      </div>
+
+      <div style={{ marginTop: 12, display: 'grid', gap: 8 }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+          <span>Decor</span>
+          {decorStyles.map((s) => (
+            <button key={s} type="button" onClick={() => onChangeDecorStyle(s)} style={modeBtn(decorStyle === s)}>
+              {s}
+            </button>
+          ))}
+        </div>
       </div>
     </section>
   )

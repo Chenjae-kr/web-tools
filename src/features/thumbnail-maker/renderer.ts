@@ -1,4 +1,4 @@
-import type { OverlayMode, Ratio } from './store'
+import type { DecorStyle, OverlayMode, Ratio } from './store'
 
 type RenderInput = {
   ratio: Ratio
@@ -6,6 +6,11 @@ type RenderInput = {
   bgImage?: HTMLImageElement | null
   overlayMode: OverlayMode
   overlayStrength: number
+  decorStyle: DecorStyle
+  textStroke: number
+  textPadding: number
+  mainY: number
+  subY: number
   mainText: string
   subText: string
 }
@@ -42,23 +47,32 @@ export function renderThumbnail(canvas: HTMLCanvasElement, input: RenderInput) {
   roundRect(ctx, cardX, cardY, cardW, cardH, 24)
   ctx.stroke()
 
+  drawDecor(ctx, cardX, cardY, cardW, cardH, input.decorStyle)
+
+  const x = cardX + input.textPadding
+  const maxW = cardW - input.textPadding * 2
+
   const titleLines = input.mainText.split('\n').filter(Boolean)
   ctx.textAlign = 'left'
   ctx.fillStyle = '#F8FAFC'
   ctx.font = `800 ${Math.round(w * 0.05)}px Pretendard, Apple SD Gothic Neo, sans-serif`
-  let y = cardY + Math.round(cardH * 0.28)
-  for (const line of titleLines.slice(0, 2)) {
-    ctx.fillText(line, cardX + 56, y)
+  let y = cardY + Math.round((cardH * input.mainY) / 100)
+
+  for (const line of titleLines.slice(0, 3)) {
+    strokeText(ctx, line, x, y, input.textStroke)
+    fitAndFillText(ctx, line, x, y, maxW)
     y += Math.round(w * 0.06)
   }
 
   ctx.fillStyle = '#94A3B8'
   ctx.font = `500 ${Math.round(w * 0.02)}px Pretendard, Apple SD Gothic Neo, sans-serif`
-  ctx.fillText(input.subText, cardX + 56, cardY + Math.round(cardH * 0.56))
+  const subY = cardY + Math.round((cardH * input.subY) / 100)
+  strokeText(ctx, input.subText, x, subY, Math.max(1, Math.round(input.textStroke * 0.65)))
+  fitAndFillText(ctx, input.subText, x, subY, maxW)
 
   const badgeW = Math.round(w * 0.25)
   const badgeH = 36
-  const badgeX = cardX + 56
+  const badgeX = x
   const badgeY = cardY + cardH - 76
   const badgeGrad = ctx.createLinearGradient(badgeX, badgeY, badgeX + badgeW, badgeY)
   badgeGrad.addColorStop(0, '#22D3EE')
@@ -70,6 +84,23 @@ export function renderThumbnail(canvas: HTMLCanvasElement, input: RenderInput) {
   ctx.fillStyle = '#0B1220'
   ctx.font = `700 16px Inter, sans-serif`
   ctx.fillText('DEV SENSE', badgeX + 14, badgeY + 24)
+}
+
+function fitAndFillText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, maxW: number) {
+  if (ctx.measureText(text).width <= maxW) {
+    ctx.fillText(text, x, y)
+    return
+  }
+  let t = text
+  while (t.length > 1 && ctx.measureText(`${t}…`).width > maxW) t = t.slice(0, -1)
+  ctx.fillText(`${t}…`, x, y)
+}
+
+function strokeText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, stroke: number) {
+  if (stroke <= 0) return
+  ctx.lineWidth = stroke
+  ctx.strokeStyle = 'rgba(2,6,23,0.85)'
+  ctx.strokeText(text, x, y)
 }
 
 function drawBackground(ctx: CanvasRenderingContext2D, w: number, h: number, input: RenderInput) {
@@ -128,6 +159,34 @@ function drawOverlay(ctx: CanvasRenderingContext2D, w: number, h: number, mode: 
   rg.addColorStop(1, `rgba(0,0,0,${0.85 * alpha})`)
   ctx.fillStyle = rg
   ctx.fillRect(0, 0, w, h)
+}
+
+function drawDecor(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, style: DecorStyle) {
+  if (style === 'minimal') return
+  ctx.strokeStyle = 'rgba(226,232,240,0.35)'
+  ctx.lineWidth = 2
+
+  if (style === 'frame') {
+    roundRect(ctx, x + 12, y + 12, w - 24, h - 24, 18)
+    ctx.stroke()
+    return
+  }
+
+  const l = Math.min(w, h) * 0.1
+  ctx.beginPath()
+  ctx.moveTo(x + 12, y + l)
+  ctx.lineTo(x + 12, y + 12)
+  ctx.lineTo(x + l, y + 12)
+  ctx.moveTo(x + w - l, y + 12)
+  ctx.lineTo(x + w - 12, y + 12)
+  ctx.lineTo(x + w - 12, y + l)
+  ctx.moveTo(x + 12, y + h - l)
+  ctx.lineTo(x + 12, y + h - 12)
+  ctx.lineTo(x + l, y + h - 12)
+  ctx.moveTo(x + w - l, y + h - 12)
+  ctx.lineTo(x + w - 12, y + h - 12)
+  ctx.lineTo(x + w - 12, y + h - l)
+  ctx.stroke()
 }
 
 function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {

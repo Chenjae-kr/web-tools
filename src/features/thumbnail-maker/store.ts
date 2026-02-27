@@ -5,6 +5,7 @@ export type Preset = 'quote' | 'blog' | 'youtube' | 'dev-sense'
 export type Ratio = '1:1' | '16:9' | '4:3' | '3:2'
 export type BgMode = 'color' | 'image'
 export type OverlayMode = 'none' | 'dim' | 'gradient' | 'vignette'
+export type DecorStyle = 'minimal' | 'frame' | 'corner'
 
 type ThumbnailMakerState = {
   preset: Preset
@@ -16,6 +17,11 @@ type ThumbnailMakerState = {
   bgImageDataUrl: string | null
   overlayMode: OverlayMode
   overlayStrength: number
+  decorStyle: DecorStyle
+  textStroke: number
+  textPadding: number
+  mainY: number
+  subY: number
   format: 'png' | 'jpeg' | 'webp'
   quality: number
 
@@ -28,6 +34,11 @@ type ThumbnailMakerState = {
   setBgImageDataUrl: (dataUrl: string | null) => void
   setOverlayMode: (mode: OverlayMode) => void
   setOverlayStrength: (value: number) => void
+  setDecorStyle: (style: DecorStyle) => void
+  setTextStroke: (value: number) => void
+  setTextPadding: (value: number) => void
+  setMainY: (value: number) => void
+  setSubY: (value: number) => void
   setFormat: (format: 'png' | 'jpeg' | 'webp') => void
   setQuality: (quality: number) => void
 }
@@ -44,6 +55,11 @@ export const useThumbnailMakerStore = create<ThumbnailMakerState>((set) => ({
   bgImageDataUrl: null,
   overlayMode: 'gradient',
   overlayStrength: 28,
+  decorStyle: 'frame',
+  textStroke: 4,
+  textPadding: 56,
+  mainY: 28,
+  subY: 56,
   format: 'png',
   quality: 92,
 
@@ -67,6 +83,11 @@ export const useThumbnailMakerStore = create<ThumbnailMakerState>((set) => ({
   setBgImageDataUrl: (bgImageDataUrl) => set({ bgImageDataUrl }),
   setOverlayMode: (overlayMode) => set({ overlayMode }),
   setOverlayStrength: (overlayStrength) => set({ overlayStrength: Math.max(0, Math.min(100, overlayStrength)) }),
+  setDecorStyle: (decorStyle) => set({ decorStyle }),
+  setTextStroke: (textStroke) => set({ textStroke: Math.max(0, Math.min(20, textStroke)) }),
+  setTextPadding: (textPadding) => set({ textPadding: Math.max(20, Math.min(220, textPadding)) }),
+  setMainY: (mainY) => set({ mainY: Math.max(10, Math.min(70, mainY)) }),
+  setSubY: (subY) => set({ subY: Math.max(25, Math.min(90, subY)) }),
   setFormat: (format) => set({ format }),
   setQuality: (quality) => set({ quality: Math.max(1, Math.min(100, quality)) }),
 }))

@@ -10,6 +10,11 @@ export function DownloadButton() {
     bgImageDataUrl,
     overlayMode,
     overlayStrength,
+    decorStyle,
+    textStroke,
+    textPadding,
+    mainY,
+    subY,
     mainText,
     subText,
     format,
@@ -21,7 +26,20 @@ export function DownloadButton() {
     hiddenCanvasRef.current = canvas
 
     const renderNow = (bgImage?: HTMLImageElement | null) => {
-      renderThumbnail(canvas, { ratio, bgColor, bgImage, overlayMode, overlayStrength, mainText, subText })
+      renderThumbnail(canvas, {
+        ratio,
+        bgColor,
+        bgImage,
+        overlayMode,
+        overlayStrength,
+        decorStyle,
+        textStroke,
+        textPadding,
+        mainY,
+        subY,
+        mainText,
+        subText,
+      })
       const mime = format === 'jpeg' ? 'image/jpeg' : format === 'webp' ? 'image/webp' : 'image/png'
       const q = Math.max(0.01, Math.min(1, quality / 100))
       const url = canvas.toDataURL(mime, q)
