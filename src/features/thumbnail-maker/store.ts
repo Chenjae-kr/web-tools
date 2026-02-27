@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { PRESETS } from './presets'
 
 export type Preset = 'quote' | 'blog' | 'youtube' | 'dev-sense'
 export type Ratio = '1:1' | '16:9' | '4:3' | '3:2'
@@ -12,6 +13,7 @@ type ThumbnailMakerState = {
   format: 'png' | 'jpeg' | 'webp'
   quality: number
 
+  setPreset: (preset: Preset) => void
   setRatio: (ratio: Ratio) => void
   setMainText: (text: string) => void
   setSubText: (text: string) => void
@@ -20,15 +22,27 @@ type ThumbnailMakerState = {
   setQuality: (quality: number) => void
 }
 
+const initial = PRESETS['dev-sense']
+
 export const useThumbnailMakerStore = create<ThumbnailMakerState>((set) => ({
-  preset: 'dev-sense',
-  ratio: '16:9',
-  mainText: '개발 능력은\n코딩을 잘하는 능력이 아니다',
-  subText: '중요한 건 문제를 고르는 감각과 우선순위 판단',
-  bgColor: '#0b1220',
+  preset: initial.preset,
+  ratio: initial.ratio,
+  mainText: initial.mainText,
+  subText: initial.subText,
+  bgColor: initial.bgColor,
   format: 'png',
   quality: 92,
 
+  setPreset: (preset) => {
+    const p = PRESETS[preset]
+    set({
+      preset,
+      ratio: p.ratio,
+      mainText: p.mainText,
+      subText: p.subText,
+      bgColor: p.bgColor,
+    })
+  },
   setRatio: (ratio) => set({ ratio }),
   setMainText: (mainText) => set({ mainText }),
   setSubText: (subText) => set({ subText }),

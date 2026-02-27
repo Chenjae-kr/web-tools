@@ -4,6 +4,7 @@ import { TextSettingsPanel } from './components/TextSettingsPanel'
 import { ExportSettingsPanel } from './components/ExportSettingsPanel'
 import { ThumbnailPreview } from './components/ThumbnailPreview'
 import { DownloadButton } from './components/DownloadButton'
+import { JsonIOPanel } from './components/JsonIOPanel'
 import { useThumbnailMakerStore } from './store'
 
 export function ThumbnailMakerPage() {
@@ -15,6 +16,7 @@ export function ThumbnailMakerPage() {
     bgColor,
     format,
     quality,
+    setPreset,
     setRatio,
     setMainText,
     setSubText,
@@ -31,6 +33,28 @@ export function ThumbnailMakerPage() {
       <p className="subtitle">설정 패널을 Canvas / Text / Export 컴포넌트로 분리</p>
 
       <div className="phaseList">
+        <section className="phaseItem">
+          <strong>Preset</strong>
+          <div style={{ marginTop: 8, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {(['quote', 'blog', 'youtube', 'dev-sense'] as const).map((p) => (
+              <button
+                key={p}
+                type="button"
+                onClick={() => setPreset(p)}
+                style={{
+                  border: '1px solid #cbd5e1',
+                  borderRadius: 8,
+                  padding: '6px 10px',
+                  background: preset === p ? '#dbeafe' : '#fff',
+                  cursor: 'pointer',
+                }}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+        </section>
+
         <CanvasSettingsPanel
           ratio={ratio}
           onChangeRatio={setRatio}
@@ -53,6 +77,7 @@ export function ThumbnailMakerPage() {
         />
 
         <ThumbnailPreview />
+        <JsonIOPanel />
       </div>
 
       <div style={{ marginTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
