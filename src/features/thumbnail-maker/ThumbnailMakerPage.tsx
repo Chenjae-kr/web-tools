@@ -1,69 +1,58 @@
-type Preset = 'quote' | 'blog' | 'youtube' | 'dev-sense'
+import { useMemo, useState } from 'react'
+import { CanvasSettingsPanel } from './components/CanvasSettingsPanel'
+import { TextSettingsPanel } from './components/TextSettingsPanel'
+import { ExportSettingsPanel } from './components/ExportSettingsPanel'
 
+type Preset = 'quote' | 'blog' | 'youtube' | 'dev-sense'
 type Ratio = '1:1' | '16:9' | '4:3' | '3:2'
 
 export function ThumbnailMakerPage() {
-  const presets: Preset[] = ['quote', 'blog', 'youtube', 'dev-sense']
-  const ratios: Ratio[] = ['1:1', '16:9', '4:3', '3:2']
+  const [preset] = useState<Preset>('dev-sense')
+  const [ratio, setRatio] = useState<Ratio>('16:9')
+  const [mainText, setMainText] = useState('개발 능력은\n코딩을 잘하는 능력이 아니다')
+  const [subText, setSubText] = useState('중요한 건 문제를 고르는 감각과 우선순위 판단')
+  const [bgColor, setBgColor] = useState('#0b1220')
+  const [format, setFormat] = useState<'png' | 'jpeg' | 'webp'>('png')
+  const [quality, setQuality] = useState(92)
+
+  const summary = useMemo(
+    () => ({ preset, ratio, format, quality }),
+    [preset, ratio, format, quality],
+  )
 
   return (
     <section className="card">
-      <h2>Thumbnail Maker (React 전환 골격)</h2>
-      <p className="subtitle">기존 tools/image/thumbnail-maker.html 기능을 단계적으로 이전하기 위한 시작점</p>
+      <h2>Thumbnail Maker (Step 1 완료)</h2>
+      <p className="subtitle">설정 패널을 Canvas / Text / Export 컴포넌트로 분리</p>
 
       <div className="phaseList">
-        <div className="phaseItem">
-          <strong>Step 1</strong>
-          <div>설정 패널 구조 분리</div>
-          <small>Canvas / Text / Export 영역 컴포넌트화</small>
-        </div>
-        <div className="phaseItem">
-          <strong>Step 2</strong>
-          <div>preset + ratio 상태관리 도입</div>
-          <small>Zustand 또는 local state로 시작, 이후 store 분리</small>
-        </div>
-        <div className="phaseItem">
-          <strong>Step 3</strong>
-          <div>canvas 렌더러 이전</div>
-          <small>기존 draw 로직을 순수 함수로 이관 후 테스트 추가</small>
-        </div>
+        <CanvasSettingsPanel
+          ratio={ratio}
+          onChangeRatio={setRatio}
+          bgColor={bgColor}
+          onChangeBgColor={setBgColor}
+        />
+
+        <TextSettingsPanel
+          mainText={mainText}
+          subText={subText}
+          onChangeMainText={setMainText}
+          onChangeSubText={setSubText}
+        />
+
+        <ExportSettingsPanel
+          format={format}
+          onChangeFormat={setFormat}
+          quality={quality}
+          onChangeQuality={setQuality}
+        />
       </div>
 
       <div style={{ marginTop: 12 }}>
-        <h3 style={{ margin: '0 0 8px' }}>초기 데이터 모델(안)</h3>
-        <pre style={{ margin: 0, padding: 12, background: '#0f172a', color: '#e2e8f0', borderRadius: 8, overflowX: 'auto' }}>
-{`type ThumbnailState = {
-  preset: Preset
-  ratio: Ratio
-  mainText: string
-  subText: string
-  bgMode: 'color' | 'image'
-  bgColor: string
-  textColor: string
-  strokeColor: string
-  strokeWidth: number
-  overlay: 'none' | 'dim' | 'gradient' | 'vignette'
-  overlayStrength: number
-}`}
+        <strong>현재 상태 요약</strong>
+        <pre style={{ margin: '8px 0 0', padding: 12, background: '#0f172a', color: '#e2e8f0', borderRadius: 8, overflowX: 'auto' }}>
+          {JSON.stringify(summary, null, 2)}
         </pre>
-      </div>
-
-      <div style={{ marginTop: 12 }}>
-        <strong>Preset 후보:</strong>
-        <div style={{ display: 'flex', gap: 8, marginTop: 8, flexWrap: 'wrap' }}>
-          {presets.map((p) => (
-            <span key={p} style={{ border: '1px solid #cbd5e1', borderRadius: 999, padding: '4px 10px', background: '#f8fafc' }}>{p}</span>
-          ))}
-        </div>
-      </div>
-
-      <div style={{ marginTop: 12 }}>
-        <strong>Ratio 후보:</strong>
-        <div style={{ display: 'flex', gap: 8, marginTop: 8, flexWrap: 'wrap' }}>
-          {ratios.map((r) => (
-            <span key={r} style={{ border: '1px solid #cbd5e1', borderRadius: 999, padding: '4px 10px', background: '#f8fafc' }}>{r}</span>
-          ))}
-        </div>
       </div>
     </section>
   )
