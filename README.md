@@ -24,6 +24,15 @@ npm run build
 npm run preview
 ```
 
+## 테스트
+
+```bash
+npm run test:e2e
+```
+
+> 첫 실행 시 Playwright 브라우저 설치가 필요합니다.
+> `npx playwright install --with-deps chromium`
+
 ## 배포
 
 - GitHub Actions에서 Pages로 자동 배포
