@@ -1,16 +1,31 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { renderThumbnail } from '../renderer'
 import { useThumbnailMakerStore } from '../store'
 
 export function ThumbnailPreview() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const { ratio, bgColor, mainText, subText } = useThumbnailMakerStore()
+  const { ratio, bgColor, bgImageDataUrl, overlayMode, overlayStrength, mainText, subText } = useThumbnailMakerStore()
+
+  const bgImage = useMemo(() => {
+    if (!bgImageDataUrl) return null
+    const img = new Image()
+    img.src = bgImageDataUrl
+    return img
+  }, [bgImageDataUrl])
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    renderThumbnail(canvas, { ratio, bgColor, mainText, subText })
-  }, [ratio, bgColor, mainText, subText])
+
+    const paint = () =>
+      renderThumbnail(canvas, { ratio, bgColor, bgImage, overlayMode, overlayStrength, mainText, subText })
+
+    if (bgImage && !bgImage.complete) {
+      bgImage.onload = paint
+      return
+    }
+    paint()
+  }, [ratio, bgColor, bgImage, overlayMode, overlayStrength, mainText, subText])
 
   return (
     <section className="phaseItem">

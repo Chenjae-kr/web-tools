@@ -4,21 +4,41 @@ import { renderThumbnail } from '../renderer'
 
 export function DownloadButton() {
   const hiddenCanvasRef = useRef<HTMLCanvasElement | null>(null)
-  const { ratio, bgColor, mainText, subText, format, quality } = useThumbnailMakerStore()
+  const {
+    ratio,
+    bgColor,
+    bgImageDataUrl,
+    overlayMode,
+    overlayStrength,
+    mainText,
+    subText,
+    format,
+    quality,
+  } = useThumbnailMakerStore()
 
   const onDownload = () => {
     const canvas = hiddenCanvasRef.current ?? document.createElement('canvas')
     hiddenCanvasRef.current = canvas
-    renderThumbnail(canvas, { ratio, bgColor, mainText, subText })
 
-    const mime = format === 'jpeg' ? 'image/jpeg' : format === 'webp' ? 'image/webp' : 'image/png'
-    const q = Math.max(0.01, Math.min(1, quality / 100))
-    const url = canvas.toDataURL(mime, q)
+    const renderNow = (bgImage?: HTMLImageElement | null) => {
+      renderThumbnail(canvas, { ratio, bgColor, bgImage, overlayMode, overlayStrength, mainText, subText })
+      const mime = format === 'jpeg' ? 'image/jpeg' : format === 'webp' ? 'image/webp' : 'image/png'
+      const q = Math.max(0.01, Math.min(1, quality / 100))
+      const url = canvas.toDataURL(mime, q)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `thumbnail-${ratio.replace(':', 'x')}.${format === 'jpeg' ? 'jpg' : format}`
+      a.click()
+    }
 
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `thumbnail-${ratio.replace(':', 'x')}.${format === 'jpeg' ? 'jpg' : format}`
-    a.click()
+    if (bgImageDataUrl) {
+      const img = new Image()
+      img.onload = () => renderNow(img)
+      img.src = bgImageDataUrl
+      return
+    }
+
+    renderNow(null)
   }
 
   return (

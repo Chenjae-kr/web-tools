@@ -12,7 +12,11 @@ export function JsonIOPanel() {
       ratio: state.ratio,
       mainText: state.mainText,
       subText: state.subText,
+      bgMode: state.bgMode,
       bgColor: state.bgColor,
+      bgImageDataUrl: state.bgImageDataUrl,
+      overlayMode: state.overlayMode,
+      overlayStrength: state.overlayStrength,
       format: state.format,
       quality: state.quality,
     }
@@ -25,7 +29,11 @@ export function JsonIOPanel() {
       if (obj.ratio) state.setRatio(obj.ratio)
       if (obj.mainText) state.setMainText(String(obj.mainText))
       if (obj.subText) state.setSubText(String(obj.subText))
+      if (obj.bgMode) state.setBgMode(obj.bgMode)
       if (obj.bgColor) state.setBgColor(String(obj.bgColor))
+      if (obj.bgImageDataUrl !== undefined) state.setBgImageDataUrl(obj.bgImageDataUrl)
+      if (obj.overlayMode) state.setOverlayMode(obj.overlayMode)
+      if (obj.overlayStrength != null) state.setOverlayStrength(Number(obj.overlayStrength))
       if (obj.format) state.setFormat(obj.format)
       if (obj.quality != null) state.setQuality(Number(obj.quality))
       if (obj.preset) state.setPreset(obj.preset)

@@ -13,24 +13,45 @@ export function ThumbnailMakerPage() {
     ratio,
     mainText,
     subText,
+    bgMode,
     bgColor,
+    overlayMode,
+    overlayStrength,
     format,
     quality,
     setPreset,
     setRatio,
     setMainText,
     setSubText,
+    setBgMode,
     setBgColor,
+    setBgImageDataUrl,
+    setOverlayMode,
+    setOverlayStrength,
     setFormat,
     setQuality,
   } = useThumbnailMakerStore()
 
-  const summary = useMemo(() => ({ preset, ratio, format, quality }), [preset, ratio, format, quality])
+  const summary = useMemo(
+    () => ({ preset, ratio, bgMode, overlayMode, overlayStrength, format, quality }),
+    [preset, ratio, bgMode, overlayMode, overlayStrength, format, quality],
+  )
+
+  const onUploadBgImage = (file: File | null) => {
+    if (!file) {
+      setBgImageDataUrl(null)
+      return
+    }
+    const reader = new FileReader()
+    reader.onload = () => setBgImageDataUrl(String(reader.result ?? ''))
+    reader.readAsDataURL(file)
+    setBgMode('image')
+  }
 
   return (
     <section className="card">
-      <h2>Thumbnail Maker (Step 1 완료)</h2>
-      <p className="subtitle">설정 패널을 Canvas / Text / Export 컴포넌트로 분리</p>
+      <h2>Thumbnail Maker (Parity 확장 중)</h2>
+      <p className="subtitle">배경 이미지/오버레이까지 이관 진행</p>
 
       <div className="phaseList">
         <section className="phaseItem">
@@ -58,8 +79,15 @@ export function ThumbnailMakerPage() {
         <CanvasSettingsPanel
           ratio={ratio}
           onChangeRatio={setRatio}
+          bgMode={bgMode}
+          onChangeBgMode={setBgMode}
           bgColor={bgColor}
           onChangeBgColor={setBgColor}
+          onUploadBgImage={onUploadBgImage}
+          overlayMode={overlayMode}
+          onChangeOverlayMode={setOverlayMode}
+          overlayStrength={overlayStrength}
+          onChangeOverlayStrength={setOverlayStrength}
         />
 
         <TextSettingsPanel
