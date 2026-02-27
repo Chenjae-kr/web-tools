@@ -1,0 +1,192 @@
+/* ═══════════════════════════════════════════════════════════
+   Dev Tools — Tool Registry
+   ═══════════════════════════════════════════════════════════ */
+
+const TOOL_CATEGORIES = [
+  'SQL/DB',
+  'Data/Format',
+  'Image',
+  'Text/Compare',
+  'Utility',
+];
+
+const TOOLS = [
+  {
+    category: 'SQL/DB', href: 'sql-db/json-sql-crud.html', label: 'JSON ↔ CRUD', icon: 'JSQL',
+    title: '🧱 JSON ↔ SQL CRUD Generator',
+    desc: 'JSON 샘플 객체를 기반으로 SELECT/INSERT/UPDATE/DELETE SQL 템플릿을 자동 생성합니다. PK 컬럼 지정과 MySQL/Oracle/PostgreSQL 방언 지원.',
+    tags: ['JSON', 'CRUD', 'MySQL', 'Oracle', 'PostgreSQL'],
+    footer: 'JSON Object → SELECT · INSERT · UPDATE · DELETE',
+  },
+  {
+    category: 'SQL/DB', href: 'sql-db/csv-to-insert.html', label: 'Table → SQL', icon: 'TBL',
+    title: '📥 Table Data → INSERT/UPSERT SQL',
+    desc: 'CSV/Excel/Markdown 테이블 데이터를 INSERT/UPSERT SQL로 변환합니다. 드래그 앤 드롭, 구분자 자동 감지, 컬럼 매핑, Preview, Chunk 출력 지원.',
+    tags: ['MySQL', 'Oracle', 'PostgreSQL', 'CSV/Excel/Markdown'],
+    footer: 'Table Data → INSERT · UPSERT SQL',
+  },
+  {
+    category: 'SQL/DB', href: 'sql-db/ddl-crud.html', label: 'DDL → CRUD', icon: 'SQL',
+    title: '🛠️ DDL → CRUD Generator',
+    desc: 'CREATE TABLE DDL을 입력하면 INSERT, SELECT, UPDATE, DELETE 쿼리를 자동 생성합니다. PK 자동 감지, MyBatis XML 지원.',
+    tags: ['MySQL', 'Oracle', 'PostgreSQL', 'MyBatis'],
+    footer: 'DDL → INSERT · SELECT · UPDATE · DELETE',
+  },
+  {
+    category: 'SQL/DB', href: 'sql-db/sql-erd.html', label: 'SQL → ERD', icon: 'ERD',
+    title: '🗺️ SQL → ERD Viewer',
+    desc: 'SQL DDL 파일을 업로드하거나 붙여넣으면 테이블 관계도(ERD)를 자동으로 그려줍니다. FK 관계·PK·컬럼 타입 시각화, 드래그 배치, SVG 내보내기 지원.',
+    tags: ['ERD', 'FK Relations', 'Schema Viz', 'SVG Export'],
+    footer: 'DDL → Entity Relationship Diagram',
+  },
+  {
+    category: 'SQL/DB', href: 'sql-db/sql-formatter.html', label: 'SQL Format', icon: 'FMT',
+    title: '✨ SQL Formatter + Lint',
+    desc: 'SQL 구문을 자동 정렬하고 위험 패턴을 빠르게 점검합니다. DELETE/UPDATE without WHERE, SELECT *, DROP/TRUNCATE TABLE 경고를 제공합니다.',
+    tags: ['Format', 'Lint', 'MySQL', 'PostgreSQL', 'Oracle'],
+    footer: 'SQL → Format · Quick Safety Lint',
+  },
+  {
+    category: 'SQL/DB', href: 'sql-db/sql-seeder-generator.html', label: 'SQL Seeder', icon: 'SEED',
+    title: '🌱 SQL Test Data Seeder Generator',
+    desc: '간단한 테이블 DSL에서 FK 의존 순서를 계산해 다중 테이블 INSERT 시드 데이터를 생성합니다.',
+    tags: ['Seed Data', 'FK Order', 'INSERT'],
+    footer: 'Schema DSL → Seed INSERT SQL',
+  },
+
+  {
+    category: 'Data/Format', href: 'data-format/data-converter.html', label: 'Data Convert', icon: 'CVT',
+    title: '🔄 JSON ↔ Excel ↔ Markdown Converter',
+    desc: 'JSON, 엑셀(.xlsx/.xls), Markdown 테이블 간 데이터를 상호 변환합니다. 엑셀 출력은 파일 다운로드를 지원합니다.',
+    tags: ['JSON', 'Excel', 'Markdown', 'Converter'],
+    footer: 'JSON ↔ Excel ↔ Markdown',
+  },
+  {
+    category: 'Data/Format', href: 'data-format/csv-column-profiler.html', label: 'CSV Profiler', icon: 'PROF',
+    title: '📊 CSV/Excel Column Profiler',
+    desc: '컬럼별 null 비율, 중복 건수, 타입 추정, 길이 통계를 빠르게 분석합니다.',
+    tags: ['CSV', 'Profiling', 'Null', 'Duplicate'],
+    footer: 'Column Stats · Type Inference',
+  },
+  {
+    category: 'Data/Format', href: 'data-format/json-formatter.html', label: 'JSON Format', icon: 'JSON',
+    title: '✅ JSON Formatter / Validator',
+    desc: 'JSON 데이터를 자동 포매팅하고 구문 오류를 감지합니다. 들여쓰기 설정, 미니파이, 문자열 이스케이프 변환을 지원합니다.',
+    tags: ['Format', 'Minify', 'Validate', 'Syntax Highlight'],
+    footer: 'JSON → Prettify · Minify · Validate',
+  },
+  {
+    category: 'Data/Format', href: 'data-format/html-to-markdown.html', label: 'HTML ↔ MD', icon: 'H2M',
+    title: '🔁 HTML ↔ Markdown Converter',
+    desc: 'HTML/Markdown 코드를 입력하거나 파일 업로드하면 양방향으로 변환합니다. heading/list/table/code block 변환을 지원합니다.',
+    tags: ['HTML', 'Markdown', 'Converter', 'Bi-directional'],
+    footer: 'HTML ↔ Markdown',
+  },
+  {
+    category: 'Data/Format', href: 'data-format/html-tag-analyzer.html', label: 'HTML Tags', icon: 'TAG',
+    title: '🏷️ HTML Tag Analyzer',
+    desc: 'HTML 소스 또는 파일을 입력하면 사용된 태그 종류/빈도/비율을 분석합니다.',
+    tags: ['HTML', 'Tag', 'Analyzer', 'Stats'],
+    footer: 'HTML → Tag Stats',
+  },
+  {
+    category: 'Data/Format', href: 'data-format/html-text-extractor.html', label: 'HTML Text', icon: 'TXT',
+    title: '🧲 HTML Visible Text Extractor',
+    desc: 'HTML 파일/소스에서 사용자에게 보이는 텍스트만 추출합니다. 숨김 요소(script/style/hidden/aria-hidden)를 제외합니다.',
+    tags: ['HTML', 'Text', 'Extractor', 'Visible Text'],
+    footer: 'HTML → Visible Text',
+  },
+  {
+    category: 'Data/Format', href: 'data-format/mock-data-generator.html', label: 'Mock Data', icon: 'MOCK',
+    title: '🎲 Mock Data Generator',
+    desc: '컬럼 스키마(DSL 또는 SQL DDL)를 기반으로 테스트 데이터를 생성합니다. CSV/JSON/SQL INSERT 출력, seed 기반 재현 가능한 랜덤 데이터 지원.',
+    tags: ['CSV', 'JSON', 'SQL INSERT', 'Seeded Random'],
+    footer: 'Schema → Mock Data',
+  },
+  {
+    category: 'Data/Format', href: 'data-format/img-to-hex.html', label: 'IMG → HEX', icon: 'HEX',
+    title: '🧬 Image → Hex Converter',
+    desc: '이미지 파일을 Hex Dump, C Array, Python bytes, Base64 형식으로 변환합니다. 드래그 앤 드롭 지원.',
+    tags: ['Hex Dump', 'C Array', 'Python', 'Base64'],
+    footer: 'Image → Hex Dump · C Array · Python · Base64',
+  },
+  {
+    category: 'Data/Format', href: 'data-format/url-encoder.html', label: 'URL & Query', icon: 'URL',
+    title: '🔗 URL & Query Builder',
+    desc: 'URL 인코딩·디코딩/파싱뿐 아니라 표·JSON·CSV 기반 Query Params 입력으로 쿼리스트링과 완성 URL 생성을 지원합니다.',
+    tags: ['Encode', 'Decode', 'Query Builder', 'JSON/CSV'],
+    footer: 'URL → Encode · Decode · Parse · Build',
+  },
+  {
+    category: 'Image', href: 'image/web-image-editor.html', label: 'Image Editor', icon: 'EDIT',
+    title: '🎨 Web Image Editor',
+    desc: '브라우저 기반의 범용 이미지 에디터입니다. 이미지 해상도에 맞춰 캔버스를 자동 조절하고 레이어(텍스트/이미지/도형) 편집 및 투명 PNG 내보내기를 지원합니다.',
+    tags: ['Web Editor', 'Fabric.js', 'Layer', 'JSON Save'],
+    footer: 'Drag & Drop Canvas Editor',
+  },
+  {
+    category: 'Image', href: 'image/thumbnail-maker.html', label: 'Thumbnail', icon: 'THMB',
+    title: '🖼️ Blog Thumbnail Maker',
+    desc: '블로그 썸네일을 빠르게 제작합니다. 이미지 비율 선택, 배경 단색/이미지, 텍스트 입력 및 PNG 다운로드를 지원합니다.',
+    tags: ['Thumbnail', 'Canvas', 'Ratio', 'PNG'],
+    footer: 'Text + Background → Thumbnail PNG',
+  },
+  {
+    category: 'Image', href: 'image/instagram-card-maker.html', label: 'Insta Card', icon: 'CARD',
+    title: '📱 Instagram Card News Maker',
+    desc: '인스타 카드뉴스를 제작합니다. 비율 선택, 배경 단색/이미지, 제목/항목 구성, 다중 페이지 PNG 내보내기를 지원합니다.',
+    tags: ['Instagram', 'Card News', 'Canvas', 'Multi Page'],
+    footer: 'Card News Template → PNG',
+  },
+  {
+    category: 'Image', href: 'image/watermark-tool.html', label: 'Watermark', icon: 'WM',
+    title: '💧 Image Watermark Tool',
+    desc: '이미지에 텍스트 또는 PNG 워터마크를 넣습니다. 위치, 투명도, 회전, 크기 조절과 PNG/JPG/WEBP 저장을 지원합니다.',
+    tags: ['Watermark', 'Text', 'PNG', 'Image Edit'],
+    footer: 'Image + Watermark → Export',
+  },
+  {
+    category: 'Image', href: 'image/table-chart-maker.html', label: 'Table Chart', icon: 'CHRT',
+    title: '📈 Table/JSON → Chart Image Maker',
+    desc: 'JSON 배열 또는 테이블 텍스트(CSV/TSV/PIPE/Markdown)를 입력하면 Bar/Line/Pie 차트 이미지를 생성합니다.',
+    tags: ['Chart', 'Bar', 'Line', 'Pie', 'JSON', 'CSV'],
+    footer: 'Data → Chart Image',
+  },
+  {
+    category: 'Image', href: 'image/pdf-to-image.html', label: 'PDF → Image', icon: 'PDF',
+    title: '📄 PDF to Image Converter',
+    desc: 'PDF 파일을 업로드하면 페이지별로 PNG/JPG/WEBP 이미지로 렌더링하고 다운로드할 수 있습니다.',
+    tags: ['PDF', 'Image', 'PNG', 'JPG', 'WEBP'],
+    footer: 'PDF Page → Image File',
+  },
+  {
+    category: 'Image', href: 'image/image-optimizer.html', label: 'Image Optimizer', icon: 'OPT',
+    title: '🗜️ Image Optimizer Toolkit',
+    desc: '이미지를 일괄 최적화합니다. 포맷 변환(JPG/WEBP/PNG), 품질/최대해상도 조절, 절감률 비교와 ZIP 다운로드를 지원합니다.',
+    tags: ['Compress', 'Resize', 'JPG', 'WEBP', 'PNG', 'ZIP'],
+    footer: 'Batch Image Optimize → Download',
+  },
+
+  {
+    category: 'Text/Compare', href: 'text-compare/diff-viewer.html', label: 'Diff Viewer', icon: 'DIFF',
+    title: '🧩 Text / Code Diff Viewer',
+    desc: '두 텍스트 또는 JSON을 비교하여 변경된 부분을 한눈에 확인합니다. 추가·삭제·수정 라인 하이라이트와 unified patch 복사를 지원합니다.',
+    tags: ['Line Diff', 'JSON Diff', 'Patch Copy', 'Unified View'],
+    footer: 'Original vs Modified — diff + patch',
+  },
+
+  {
+    category: 'Utility', href: 'utility/data-masker.html', label: 'Data Masker', icon: 'MASK',
+    title: '🕶️ Data Masker (PII Redaction)',
+    desc: '텍스트/JSON 내 이메일, 전화번호, 카드번호, 주민번호 패턴을 감지하여 마스킹합니다.',
+    tags: ['PII', 'Masking', 'Security'],
+    footer: 'Redact Sensitive Data',
+  },
+  {
+    category: 'Utility', href: 'utility/cron-builder.html', label: 'Cron Builder', icon: 'CRON',
+    title: '⏰ Cron Builder & Humanize',
+    desc: 'Linux 5-field cron 식을 빠르게 생성하고 자연어 해석을 제공합니다. 자주 쓰는 프리셋(매 5분, 평일 9시 등)과 복사 버튼 지원.',
+    tags: ['Cron', 'Schedule', 'Humanize', 'Preset'],
+    footer: 'Cron → Build · Explain',
+  },
+];
